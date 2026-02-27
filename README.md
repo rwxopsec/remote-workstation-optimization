@@ -49,3 +49,18 @@ Ran into an error where the stream would pause on connection. I resolved this by
 
 ### 💡 Conclusion
 By moving away from RDP and implementing a headless virtual display, I successfully turned my RTX 5070ti desktop into a private cloud workstation accessible from anywhere.
+
+🛡️ Security Posture & Architecture
+• Zero-Trust Networking: By utilizing Tailscale (WireGuard), this workstation is never exposed to the public internet via port forwarding or UPnP.
+• Encrypted Tunneling: All traffic is encapsulated within a ChaCha20-Poly1305 encrypted tunnel, ensuring the stream remains private even on untrusted cellular networks.
+• Attack Surface Reduction: UPnP has been manually disabled at the router level to mitigate risks like NAT Hole Punching and unauthorized internal port mapping.
+🔧 Advanced Troubleshooting: The "Hotspot Transition"
+Transitioning from high-bandwidth LAN to a variable WAN (Cellular) connection introduced significant network jitter that required protocol-level tuning.
+• Bufferbloat Management: High bitrate streams over cellular gateways often cause massive packet queuing. I implemented a "Travel Profile" (30 FPS / 10 Mbps) to ensure the gateway processes packets without inducing input lag.
+• MTU Optimization: To account for cellular encapsulation overhead (LTE/5G), the MTU (Maximum Transmission Unit) was tuned to 1200 to prevent packet fragmentation and drop-outs.
+• P2P Verification: I utilize the terminal to run tailscale status and ping commands to verify a Direct P2P connection, bypassing high-latency relay (DERP) nodes.
+🗺️ Future Roadmap
+• Automation: Develop a PowerShell script to automatically toggle the Virtual Display and swap primary display focus when a Sunshine session is initiated.
+• Multi-Node Expansion: Adding secondary Linux-based workstations (Parrot OS nodes) to the mesh to test remote penetration testing and security auditing capabilities.
+• Headless Hardening: Fully configuring the host PC for a "Headless" state, relying entirely on the Virtual Display Driver and encrypted remote management.
+
